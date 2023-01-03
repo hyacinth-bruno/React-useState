@@ -1,5 +1,9 @@
 import "./App.css";
 
+import ProductItem from "./components/ProductItem";
+
+import { useState } from "react";
+
 const productList = [
   {
     id: 1,
@@ -109,7 +113,59 @@ const productList = [
   },
 ];
 function App() {
-  return <div className="App"></div>;
+  const [UserInput, setUserInput] = useState("");
+  const [product, setProduct] = useState(productList);
+
+  function handleInput(UserInput) {
+    console.log("Typing!", "typing"); //track when user types something in the input field
+    let input = UserInput.target.value; //read the content of the input field as they change
+    console.log(input); //display the value of result
+    setUserInput(input);
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault(); //form reset
+    const result = productList.filter((item) => item.title.toLocaleLowerCase().includes(UserInput.toLocaleLowerCase()));
+    console.log(result);
+    setProduct(result);
+   
+  }
+
+console.log(product, "product");
+
+  return (
+    <div className="App">
+      <h2>Product List</h2>
+      <div className="form">
+        <form>
+          <label>
+            <h4>Please enter the product name:</h4>
+            <input type="text" name="name" onChange={handleInput} />
+          </label>
+
+          <button type="submit" onClick={handleSubmit}>
+            Search
+          </button>
+        </form>
+      </div>
+
+      <div> 
+        Here is the result
+        {product.map((item) => {
+          return (
+            <ProductItem
+              key={item.id}
+              name={item.title}
+              price={item.price}
+              image={item.image}
+            />
+          );
+        })}
+      </div>
+
+
+    </div>
+  );
 }
 
 export default App;
